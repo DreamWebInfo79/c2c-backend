@@ -3,87 +3,189 @@ POST  http://localhost:3001/cars
 Content-Type: application/json
 
 {
-  "uniqueId" : "b260bc7d-dc86-4573-8b35-ad4c693e5203",
-  "cars": [
-    {
-      "id": 1,
-      "brand": "Toyota",
-      "model": "Camry",
-      "year": "2022",
-      "price": "$30,000",
-      "kmDriven": "30,000 km",
-      "fuelType": "Petrol",
-      "transmission": "Automatic",
-      "condition": "Good",
-      "location": "Hyderabad",
-      "images": [
-        "path/to/car/image1_1.jpg",
-        "path/to/car/image1_2.jpg",
-        "path/to/car/image1_3.jpg"
-      ],
-      "features": [
-        { "icon": "FaSnowflake", "label": "Air Conditioning" },
-        { "icon": "FaWindowMaximize", "label": "Power Windows" },
-        { "icon": "FaCogs", "label": "Power Steering" },
-        { "icon": "FaCar", "label": "Cruise Control" },
-        { "icon": "MdEventSeat", "label": "Leather Seats" },
-        { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
-        { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
-        { "icon": "FaKey", "label": "Keyless Entry" },
-        { "icon": "FaSun", "label": "Sunroof" },
-        { "icon": "MdEventSeat", "label": "Heated Seats" },
-        { "icon": "FaCameraRetro", "label": "Backup Camera" }
-      ],
-      "technicalSpecifications": [
-        { "label": "Touchscreen Display", "value": "Yes" },
-        { "label": "Number of Doors", "value": "4" },
-        { "label": "Number of Seats", "value": "5" },
-        { "label": "Body Type", "value": "Sedan" },
-        { "label": "Parking Sensors", "value": "Yes" },
-        { "label": "Child Safety Locks", "value": "Yes" }
-      ]
-    },
-    {
-      "id": 2,
-      "brand": "Honda",
-      "model": "Civic",
-      "year": "2023",
-      "price": "$25,000",
-      "kmDriven": "20,000 km",
-      "fuelType": "Diesel",
-      "transmission": "Manual",
-      "condition": "Excellent",
-      "location": "Bangalore",
-      "images": [
-        "path/to/car/image2_1.jpg",
-        "path/to/car/image2_2.jpg",
-        "path/to/car/image2_3.jpg"
-      ],
-      "features": [
-        { "icon": "FaSnowflake", "label": "Air Conditioning" },
-        { "icon": "FaWindowMaximize", "label": "Power Windows" },
-        { "icon": "FaCogs", "label": "Power Steering" },
-        { "icon": "FaCar", "label": "Cruise Control" },
-        { "icon": "MdEventSeat", "label": "Leather Seats" },
-        { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
-        { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
-        { "icon": "FaKey", "label": "Keyless Entry" },
-        { "icon": "FaSun", "label": "Sunroof" },
-        { "icon": "MdEventSeat", "label": "Heated Seats" },
-        { "icon": "FaCameraRetro", "label": "Backup Camera" }
-      ],
-      "technicalSpecifications": [
-        { "label": "Touchscreen Display", "value": "Yes" },
-        { "label": "Number of Doors", "value": "4" },
-        { "label": "Number of Seats", "value": "5" },
-        { "label": "Body Type", "value": "Sedan" },
-        { "label": "Parking Sensors", "value": "Yes" },
-        { "label": "Child Safety Locks", "value": "Yes" }
-      ]
-    }
-  ]
+  "uniqueId" : "c13744f8-00ba-42b5-a6da-1a114415f892",
+  "brands": [
+    "Toyota",
+    "Tata",
+    "Nissan",
+    "BMW",
+    "Mercedes",
+    "Audi",
+    "Hyundai",
+    "Kia",
+    "Volkswagen",
+    "Land Rover",
+    "Ferrari",
+    "Porsche"
+  ],
+  "cars": {
+    "Toyota": [
+      {
+        "id": 1,
+        "brand": "Toyota",
+        "model": "Camry",
+        "year": "2022",
+        "price": "$30,000",
+        "kmDriven": "30,000 km",
+        "fuelType": "Petrol",
+        "transmission": "Automatic",
+        "condition": "Good",
+        "location": "Hyderabad",
+        "images": [
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+        ],
+        "features": [
+          { "icon": "FaSnowflake", "label": "Air Conditioning" },
+          { "icon": "FaWindowMaximize", "label": "Power Windows" },
+          { "icon": "FaCogs", "label": "Power Steering" },
+          { "icon": "FaCar", "label": "Cruise Control" },
+          { "icon": "MdEventSeat", "label": "Leather Seats" },
+          { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+          { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+          { "icon": "FaKey", "label": "Keyless Entry" },
+          { "icon": "FaSun", "label": "Sunroof" },
+          { "icon": "MdEventSeat", "label": "Heated Seats" },
+          { "icon": "FaCameraRetro", "label": "Backup Camera" }
+        ],
+        "technicalSpecifications": [
+          { "label": "Touchscreen Display", "value": "Yes" },
+          { "label": "Number of Doors", "value": "4" },
+          { "label": "Number of Seats", "value": "5" },
+          { "label": "Body Type", "value": "Sedan" },
+          { "label": "Parking Sensors", "value": "Yes" },
+          { "label": "Child Safety Locks", "value": "Yes" }
+        ]
+      },
+      {
+        "id": 2,
+        "brand": "Toyota",
+        "model": "Corolla",
+        "year": "2021",
+        "price": "$28,000",
+        "kmDriven": "25,000 km",
+        "fuelType": "Diesel",
+        "transmission": "Manual",
+        "condition": "Excellent",
+        "location": "Mumbai",
+        "images": [
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+        ],
+        "features": [
+          { "icon": "FaSnowflake", "label": "Air Conditioning" },
+          { "icon": "FaWindowMaximize", "label": "Power Windows" },
+          { "icon": "FaCogs", "label": "Power Steering" },
+          { "icon": "FaCar", "label": "Cruise Control" },
+          { "icon": "MdEventSeat", "label": "Leather Seats" },
+          { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+          { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+          { "icon": "FaKey", "label": "Keyless Entry" },
+          { "icon": "FaSun", "label": "Sunroof" },
+          { "icon": "MdEventSeat", "label": "Heated Seats" },
+          { "icon": "FaCameraRetro", "label": "Backup Camera" }
+        ],
+        "technicalSpecifications": [
+          { "label": "Touchscreen Display", "value": "Yes" },
+          { "label": "Number of Doors", "value": "4" },
+          { "label": "Number of Seats", "value": "5" },
+          { "label": "Body Type", "value": "Sedan" },
+          { "label": "Parking Sensors", "value": "Yes" },
+          { "label": "Child Safety Locks", "value": "Yes" }
+        ]
+      }
+    ],
+    "Tata": [
+      {
+        "id": 3,
+        "brand": "Tata",
+        "model": "Nexon",
+        "year": "2023",
+        "price": "$20,000",
+        "kmDriven": "15,000 km",
+        "fuelType": "Petrol",
+        "transmission": "Automatic",
+        "condition": "New",
+        "location": "Delhi",
+        "images": [
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+        ],
+        "features": [
+          { "icon": "FaSnowflake", "label": "Air Conditioning" },
+          { "icon": "FaWindowMaximize", "label": "Power Windows" },
+          { "icon": "FaCogs", "label": "Power Steering" },
+          { "icon": "FaCar", "label": "Cruise Control" },
+          { "icon": "MdEventSeat", "label": "Leather Seats" },
+          { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+          { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+          { "icon": "FaKey", "label": "Keyless Entry" },
+          { "icon": "FaSun", "label": "Sunroof" },
+          { "icon": "MdEventSeat", "label": "Heated Seats" },
+          { "icon": "FaCameraRetro", "label": "Backup Camera" }
+        ],
+        "technicalSpecifications": [
+          { "label": "Touchscreen Display", "value": "Yes" },
+          { "label": "Number of Doors", "value": "4" },
+          { "label": "Number of Seats", "value": "5" },
+          { "label": "Body Type", "value": "SUV" },
+          { "label": "Parking Sensors", "value": "Yes" },
+          { "label": "Child Safety Locks", "value": "Yes" }
+        ]
+      },
+      {
+        "id": 4,
+        "brand": "Tata",
+        "model": "Harrier",
+        "year": "2022",
+        "price": "$27,000",
+        "kmDriven": "18,000 km",
+        "fuelType": "Diesel",
+        "transmission": "Manual",
+        "condition": "Excellent",
+        "location": "Chennai",
+        "images": [
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+          "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+        ],
+        "features": [
+          { "icon": "FaSnowflake", "label": "Air Conditioning" },
+          { "icon": "FaWindowMaximize", "label": "Power Windows" },
+          { "icon": "FaCogs", "label": "Power Steering" },
+          { "icon": "FaCar", "label": "Cruise Control" },
+          { "icon": "MdEventSeat", "label": "Leather Seats" },
+          { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+          { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+          { "icon": "FaKey", "label": "Keyless Entry" },
+          { "icon": "FaSun", "label": "Sunroof" },
+          { "icon": "MdEventSeat", "label": "Heated Seats" },
+          { "icon": "FaCameraRetro", "label": "Backup Camera" }
+        ],
+        "technicalSpecifications": [
+          { "label": "Touchscreen Display", "value": "Yes" },
+          { "label": "Number of Doors", "value": "4" },
+          { "label": "Number of Seats", "value": "5" },
+          { "label": "Body Type", "value": "SUV" },
+          { "label": "Parking Sensors", "value": "Yes" },
+          { "label": "Child Safety Locks", "value": "Yes" }
+        ]
+      }
+    ]
+  }
 }
-
 
 ###
 POST http://localhost:3001/user/login
@@ -112,8 +214,41 @@ POST http://localhost:3001/admin/register
 Content-Type: application/json
 
 {
-  "username" : "kiruthikaradmin1",
+  "email" : "kiruthi@gmail.com",
   "password" : "checking"
+}
+
+
+
+
+###
+POST http://localhost:3001/admin/register/top
+Content-Type: application/json
+
+{
+  "email" : "kiruthiadmin@gmail.com",
+  "password" : "checking"
+}
+
+
+###
+PUT http://localhost:3001/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
+Content-Type: application/json
+
+{
+  "email" : "kiruthika@gmail.com",
+  "password" : "checking",
+  "uniqueId" : "4e20eab9-64c2-4203-b06a-bde5b5527e9a"
+}
+
+###
+DELETE  http://localhost:3001/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
+Content-Type: application/json
+
+{
+  "email" : "kiruthika@gmail.com",
+  "password" : "checking",
+  "uniqueId" : "4e20eab9-64c2-4203-b06a-bde5b5527e9a"
 }
 
 
@@ -122,7 +257,7 @@ POST http://localhost:3001/admin/login
 Content-Type: application/json
 
 {
-  "username" : "kiruthikaradmin1",
+  "email" : "kiruthi@gmail.com",
   "password" : "checking"
 }
 
