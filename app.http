@@ -516,3 +516,7 @@ POST http://localhost:3001/cars/add-uuid
 //route to get single car data 
 ###
 GET http://localhost:3001/cars/623d97170ff4
+
+###
+# Route to get all admin data
+GET http://localhost:3001/admin/all HTTP/1.1

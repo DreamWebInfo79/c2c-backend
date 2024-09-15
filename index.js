@@ -38,7 +38,8 @@ const adminSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   uniqueId: { type: String, unique: true }, // Unique UUID
-  isTopAdmin: { type: Boolean, default: false } 
+  isTopAdmin: { type: Boolean, default: false } ,
+  createdAt: { type: Date, default: Date.now }
 });
 
 
@@ -121,31 +122,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.post('/cars/add-uuid', async (req, res) => {
-  try {
-    // Fetch all cars from the database
-    const cars = await Car.find();
-
-    // Update each car with a new UUID
-    const updatedCars = await Promise.all(
-      cars.map(async (car) => {
-        // Generate a 12-digit UUID (truncated version of the standard UUID)
-        const carId = uuidv4().replace(/-/g, '').slice(0, 12);
-
-        // Update the car document with the new UUID
-        car.carId = carId;
-        return await car.save();
-      })
-    );
-
-    // Respond with a success message
-    res.status(200).json({ message: 'Car UUIDs added successfully!', cars: updatedCars });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to add UUIDs to cars' });
-  }
-});
-
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {
   const { email, password } = req.body;
@@ -161,11 +137,28 @@ app.post('/admin/register', async (req, res) => {
   }
 });
 
+// Route to get all the admin data 
+app.get('/admin/all', async (req, res) => {
+  try {
+    // Find all admin data
+    const admins = await Admin.find({ isTopAdmin: { $ne: true } });
+    // const admins = await Admin.find({});
+
+    // Return the data
+    res.json(admins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch admin data' });
+  }
+});
+
+
 // Route to edit admin details (protected for admins only)
 app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
-  const { uniqueId } = req.body;
-  const { id } = req.params;
-  const { email, password } = req.body;
+  const { id } = req.params; // This is the ID of the admin to be updated
+  const { email, password, uniqueId } = req.body; // This is the ID of the admin making the request
+
+  console.log(email, password, uniqueId);
 
   try {
     // Check if the request comes from an authorized admin
@@ -176,7 +169,7 @@ app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
 
     // Check if the admin is attempting to edit the top admin
     const topAdmin = await Admin.findOne({ isTopAdmin: true });
-    if (id === topAdmin._id.toString()) {
+    if (id === topAdmin.uniqueId) {
       return res.status(403).json({ error: 'Cannot edit top admin' });
     }
 
@@ -191,14 +184,13 @@ app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
     }
 
     // Find the admin by ID and update it
-    const updatedAdmin = await Admin.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedAdmin = await Admin.findOneAndUpdate({ uniqueId: id }, updateData, { new: true });
 
     if (!updatedAdmin) {
       return res.status(404).json({ error: 'Admin not found' });
     }
 
-    // Respond with the updated admin details
-    res.status(200).json({ message: 'Admin updated successfully!', admin: updatedAdmin });
+    res.status(200).json({ message: 'Admin updated successfully!' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to update admin' });
@@ -220,12 +212,12 @@ app.delete('/admin/:id', authenticateUniqueId, async (req, res) => {
 
     // Check if the admin is attempting to delete the top admin
     const topAdmin = await Admin.findOne({ isTopAdmin: true });
-    if (id === topAdmin._id.toString()) {
+    if (id === topAdmin.uniqueId) {
       return res.status(403).json({ error: 'Cannot delete top admin' });
     }
 
-    // Find and delete the admin by ID
-    const deletedAdmin = await Admin.findByIdAndDelete(id);
+    // Find and delete the admin by uniqueId
+    const deletedAdmin = await Admin.findOneAndDelete({ uniqueId: id });
 
     if (!deletedAdmin) {
       return res.status(404).json({ error: 'Admin not found' });
@@ -238,6 +230,7 @@ app.delete('/admin/:id', authenticateUniqueId, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete admin' });
   }
 });
+
 
 // Route to register a new top admin
 app.post('/admin/register/top', async (req, res) => {
