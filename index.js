@@ -426,17 +426,6 @@ app.post('/user/login', async (req, res) => {
 });
 
 // Route to get all cars (accessible to everyone)
-// app.get('/all-cars', async (req, res) => {
-//   try {
-//     const cars = await Car.find();
-
-//     res.status(200).json({ cars });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'Failed to retrieve cars' });
-//   }
-// });
-
 app.get('/all-cars', async (req, res) => {
   try {
     // Fetch all cars from the database
@@ -488,41 +477,6 @@ app.get('/cars/:id', async (req, res) => {
 
 
 // Route to save car data (protected for admins only)
-// Route to save car data (protected for admins only)
-// app.post('/cars', authenticateUniqueId, async (req, res) => {
-//   const { uniqueId, cars } = req.body;
-
-//   try {
-//     // Check if the request comes from an authorized admin
-//     const admin = await Admin.findOne({ uniqueId });
-//     if (!admin) {
-//       return res.status(403).json({ error: 'Unauthorized' });
-//     }
-
-//     // Validate if cars data is present and structured correctly
-//     if (!cars || typeof cars !== 'object') {
-//       return res.status(400).json({ error: 'Invalid data format' });
-//     }
-
-//     // Flatten the cars object (by brand) into a single array of cars
-//     const carArray = Object.values(cars).flat();
-
-//     // Save each car in the database
-//     const savedCars = await Promise.all(
-//       carArray.map(async (carData) => {
-//         const newCar = new Car(carData);
-//         return await newCar.save();
-//       })
-//     );
-
-//     // Respond with a success message
-//     res.status(201).json({ message: 'Cars saved successfully!', cars: savedCars });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'Failed to save cars' });
-//   }
-// });
-
 app.post('/cars', authenticateUniqueId, async (req, res) => {
   const { uniqueId, car } = req.body;
 
