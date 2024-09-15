@@ -35,9 +35,10 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Define Admin schema
 const adminSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
+  email: { type: String, unique: true },
   password: String,
-  uniqueId: { type: String, unique: true } // Unique UUID
+  uniqueId: { type: String, unique: true }, // Unique UUID
+  isTopAdmin: { type: Boolean, default: false } 
 });
 
 
@@ -147,11 +148,11 @@ app.post('/cars/add-uuid', async (req, res) => {
 
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const uniqueId = uuidv4(); // Generate UUID
-    const newAdmin = new Admin({ username, password: hashedPassword, uniqueId });
+    const newAdmin = new Admin({ email, password: hashedPassword, uniqueId });
     await newAdmin.save();
     res.status(201).json({ message: 'Admin registered successfully!', uniqueId });
   } catch (err) {
@@ -164,7 +165,7 @@ app.post('/admin/register', async (req, res) => {
 app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
   const { uniqueId } = req.body;
   const { id } = req.params;
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Check if the request comes from an authorized admin
@@ -181,8 +182,8 @@ app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
 
     const updateData = {};
 
-    if (username) {
-      updateData.username = username;
+    if (email) {
+      updateData.email = email;
     }
 
     if (password) {
@@ -240,11 +241,11 @@ app.delete('/admin/:id', authenticateUniqueId, async (req, res) => {
 
 // Route to register a new top admin
 app.post('/admin/register/top', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const uniqueId = uuidv4(); // Generate UUID
-    const newAdmin = new Admin({ username, password: hashedPassword, uniqueId, isTopAdmin: true });
+    const newAdmin = new Admin({ email, password: hashedPassword, uniqueId, isTopAdmin: true });
     await newAdmin.save();
     res.status(201).json({ message: 'Top admin registered successfully!', uniqueId });
   } catch (err) {
@@ -256,9 +257,9 @@ app.post('/admin/register/top', async (req, res) => {
 
 // Route to log in as admin
 app.post('/admin/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const admin = await Admin.findOne({ username });
+    const admin = await Admin.findOne({ email });
     if (!admin || !(await bcrypt.compare(password, admin.password))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -360,7 +361,7 @@ app.post('/user/request-reset', async (req, res) => {
     const otp = crypto.randomInt(100000, 999999).toString(); // Generate 6-digit OTP
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // Set expiry time (15 minutes)
 
-    const user = await User.findOne({ username: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -390,7 +391,7 @@ app.post('/user/reset-password', async (req, res) => {
   const { email, otp, newPassword } = req.body;
 
   try {
-    const user = await User.findOne({ username: email });
+    const user = await User.findOne({ email: email });
 
     if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
       return res.status(400).json({ error: 'Invalid or expired OTP' });
