@@ -7,9 +7,20 @@ const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const rateLimit = require('express-rate-limit');
+const cors = require('cors');
 require('dotenv').config(); 
 
 const app = express();
+
+app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:3000', // Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+}));
+
+app.use(express.json()); 
+
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
@@ -50,34 +61,40 @@ const userSchema = new mongoose.Schema({
 
 
 
-// Define the Car schema
 const carSchema = new mongoose.Schema({
-  brand: String,
-  model: String,
-  year: String,
-  price: String,
-  kmDriven: String,
-  fuelType: String,
-  transmission: String,
-  condition: String,
-  location: String,
-  images: [String],
+  carId: { type: String, unique: true },
+  brand: { type: String, required: true },
+  model: { type: String, required: true },
+  year: { type: String, required: true },
+  price: { type: String, required: true },
+  kmDriven: { type: String, required: true },
+  fuelType: { type: String, required: true },
+  transmission: { type: String, required: true },
+  condition: { type: String, required: true },
+  location: { type: String, required: true },
+  images: {
+    type: [String],
+    default: []
+  },
   features: [
     {
-      icon: String,
-      label: String
+      icon: { type: String },
+      label: { type: String }
     }
   ],
   technicalSpecifications: [
     {
-      label: String,
-      value: String
+      label: { type: String },
+      value: { type: String }
     }
   ]
 });
 
-// Create a Car model
+// Create models
 const Car = mongoose.model('Car', carSchema);
+
+// Create a Car model
+// const Car = mongoose.model('Car', carSchema);
 
 
 // Create models for admins and users
@@ -101,6 +118,31 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+});
+
+app.post('/cars/add-uuid', async (req, res) => {
+  try {
+    // Fetch all cars from the database
+    const cars = await Car.find();
+
+    // Update each car with a new UUID
+    const updatedCars = await Promise.all(
+      cars.map(async (car) => {
+        // Generate a 12-digit UUID (truncated version of the standard UUID)
+        const carId = uuidv4().replace(/-/g, '').slice(0, 12);
+
+        // Update the car document with the new UUID
+        car.carId = carId;
+        return await car.save();
+      })
+    );
+
+    // Respond with a success message
+    res.status(200).json({ message: 'Car UUIDs added successfully!', cars: updatedCars });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to add UUIDs to cars' });
+  }
 });
 
 // Route to register a new admin
@@ -389,11 +431,106 @@ app.post('/user/login', async (req, res) => {
   }
 });
 
+// Route to get all cars (accessible to everyone)
+// app.get('/all-cars', async (req, res) => {
+//   try {
+//     const cars = await Car.find();
+
+//     res.status(200).json({ cars });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Failed to retrieve cars' });
+//   }
+// });
+
+app.get('/all-cars', async (req, res) => {
+  try {
+    // Fetch all cars from the database
+    const cars = await Car.find();
+
+    // Format the cars data by brand
+    const carsByBrand = cars.reduce((acc, car) => {
+      if (!acc[car.brand]) {
+        acc[car.brand] = [];
+      }
+      acc[car.brand].push(car);
+      return acc;
+    }, {});
+
+    // Respond with the formatted car data
+    res.status(200).json({ cars: carsByBrand });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to retrieve cars' });
+  }
+});
+
+
+// Route to get only one car data based on the params id 
+
+// Route to get a single car by ID
+app.get('/cars/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the car by ID
+    const car = await Car.findOne({ carId: id });
+
+    // If car is not found
+    if (!car) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+
+    // Respond with the car details
+    res.status(200).json({ car });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to retrieve car' });
+  }
+});
+
+
+
+
 
 // Route to save car data (protected for admins only)
 // Route to save car data (protected for admins only)
+// app.post('/cars', authenticateUniqueId, async (req, res) => {
+//   const { uniqueId, cars } = req.body;
+
+//   try {
+//     // Check if the request comes from an authorized admin
+//     const admin = await Admin.findOne({ uniqueId });
+//     if (!admin) {
+//       return res.status(403).json({ error: 'Unauthorized' });
+//     }
+
+//     // Validate if cars data is present and structured correctly
+//     if (!cars || typeof cars !== 'object') {
+//       return res.status(400).json({ error: 'Invalid data format' });
+//     }
+
+//     // Flatten the cars object (by brand) into a single array of cars
+//     const carArray = Object.values(cars).flat();
+
+//     // Save each car in the database
+//     const savedCars = await Promise.all(
+//       carArray.map(async (carData) => {
+//         const newCar = new Car(carData);
+//         return await newCar.save();
+//       })
+//     );
+
+//     // Respond with a success message
+//     res.status(201).json({ message: 'Cars saved successfully!', cars: savedCars });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Failed to save cars' });
+//   }
+// });
+
 app.post('/cars', authenticateUniqueId, async (req, res) => {
-  const { uniqueId } = req.body;
+  const { uniqueId, car } = req.body;
 
   try {
     // Check if the request comes from an authorized admin
@@ -402,29 +539,25 @@ app.post('/cars', authenticateUniqueId, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Extract car data from the request body
-    const { cars } = req.body;
-
-    // Validate if cars data is present
-    if (!cars || !Array.isArray(cars)) {
+    // Validate if the car data is present
+    if (!car || typeof car !== 'object') {
       return res.status(400).json({ error: 'Invalid data format' });
     }
 
-    // Save each car in the database
-    const savedCars = await Promise.all(
-      cars.map(async (carData) => {
-        const newCar = new Car(carData);
-        return await newCar.save();
-      })
-    );
+    // Create a new car document
+    const newCar = new Car(car);
+    const savedCar = await newCar.save();
 
     // Respond with a success message
-    res.status(201).json({ message: 'Cars saved successfully!', cars: savedCars });
+    res.status(201).json({ message: 'Car added successfully!', car: savedCar });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to save cars' });
+    res.status(500).json({ error: 'Failed to add car' });
   }
 });
+
+
+
 
 // Route to edit car data (protected for admins only)
 app.put('/cars/:id', authenticateUniqueId, async (req, res) => {

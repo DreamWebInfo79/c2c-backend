@@ -3,97 +3,213 @@ POST  http://localhost:3001/cars
 Content-Type: application/json
 
 {
-  "uniqueId" : "b260bc7d-dc86-4573-8b35-ad4c693e5203",
-  "cars": [
-    {
-      "id": 1,
-      "brand": "Toyota",
-      "model": "Camry",
-      "year": "2022",
-      "price": "$30,000",
-      "kmDriven": "30,000 km",
-      "fuelType": "Petrol",
-      "transmission": "Automatic",
-      "condition": "Good",
-      "location": "Hyderabad",
-      "images": [
-        "path/to/car/image1_1.jpg",
-        "path/to/car/image1_2.jpg",
-        "path/to/car/image1_3.jpg"
-      ],
-      "features": [
-        { "icon": "FaSnowflake", "label": "Air Conditioning" },
-        { "icon": "FaWindowMaximize", "label": "Power Windows" },
-        { "icon": "FaCogs", "label": "Power Steering" },
-        { "icon": "FaCar", "label": "Cruise Control" },
-        { "icon": "MdEventSeat", "label": "Leather Seats" },
-        { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
-        { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
-        { "icon": "FaKey", "label": "Keyless Entry" },
-        { "icon": "FaSun", "label": "Sunroof" },
-        { "icon": "MdEventSeat", "label": "Heated Seats" },
-        { "icon": "FaCameraRetro", "label": "Backup Camera" }
-      ],
-      "technicalSpecifications": [
-        { "label": "Touchscreen Display", "value": "Yes" },
-        { "label": "Number of Doors", "value": "4" },
-        { "label": "Number of Seats", "value": "5" },
-        { "label": "Body Type", "value": "Sedan" },
-        { "label": "Parking Sensors", "value": "Yes" },
-        { "label": "Child Safety Locks", "value": "Yes" }
-      ]
-    },
-    {
-      "id": 2,
-      "brand": "Honda",
-      "model": "Civic",
-      "year": "2023",
-      "price": "$25,000",
-      "kmDriven": "20,000 km",
-      "fuelType": "Diesel",
-      "transmission": "Manual",
-      "condition": "Excellent",
-      "location": "Bangalore",
-      "images": [
-        "path/to/car/image2_1.jpg",
-        "path/to/car/image2_2.jpg",
-        "path/to/car/image2_3.jpg"
-      ],
-      "features": [
-        { "icon": "FaSnowflake", "label": "Air Conditioning" },
-        { "icon": "FaWindowMaximize", "label": "Power Windows" },
-        { "icon": "FaCogs", "label": "Power Steering" },
-        { "icon": "FaCar", "label": "Cruise Control" },
-        { "icon": "MdEventSeat", "label": "Leather Seats" },
-        { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
-        { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
-        { "icon": "FaKey", "label": "Keyless Entry" },
-        { "icon": "FaSun", "label": "Sunroof" },
-        { "icon": "MdEventSeat", "label": "Heated Seats" },
-        { "icon": "FaCameraRetro", "label": "Backup Camera" }
-      ],
-      "technicalSpecifications": [
-        { "label": "Touchscreen Display", "value": "Yes" },
-        { "label": "Number of Doors", "value": "4" },
-        { "label": "Number of Seats", "value": "5" },
-        { "label": "Body Type", "value": "Sedan" },
-        { "label": "Parking Sensors", "value": "Yes" },
-        { "label": "Child Safety Locks", "value": "Yes" }
-      ]
-    }
-  ]
+  "uniqueId": "c13744f8-00ba-42b5-a6da-1a114415f892",
+  "cars": {
+    "Mustang":[
+    "brand": "Ford",
+    "model": "Mustang",
+    "year": "2024",
+    "price": "$40,000",
+    "kmDriven": "0 km",
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "condition": "New",
+    "location": "New York",
+    "images": [
+      "https://example.com/image1.jpg",
+      "https://example.com/image2.jpg"
+    ],
+    "features": [
+      { "icon": "FaSnowflake", "label": "Air Conditioning" },
+      { "icon": "FaCar", "label": "Cruise Control" }
+    ],
+    "technicalSpecifications": [
+      { "label": "Touchscreen Display", "value": "Yes" },
+      { "label": "Number of Doors", "value": "2" }
+    ]
+  ],
+  }
 }
 
+# {
+#   "uniqueId" : "c13744f8-00ba-42b5-a6da-1a114415f892",
+#   "cars": {
+#     "Toyota": [
+#       {
+#         "id": 1,
+#         "brand": "Toyota",
+#         "model": "Camry",
+#         "year": "2022",
+#         "price": "$30,000",
+#         "kmDriven": "30,000 km",
+#         "fuelType": "Petrol",
+#         "transmission": "Automatic",
+#         "condition": "Good",
+#         "location": "Hyderabad",
+#         "images": [
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+#         ],
+#         "features": [
+#           { "icon": "FaSnowflake", "label": "Air Conditioning" },
+#           { "icon": "FaWindowMaximize", "label": "Power Windows" },
+#           { "icon": "FaCogs", "label": "Power Steering" },
+#           { "icon": "FaCar", "label": "Cruise Control" },
+#           { "icon": "MdEventSeat", "label": "Leather Seats" },
+#           { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+#           { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+#           { "icon": "FaKey", "label": "Keyless Entry" },
+#           { "icon": "FaSun", "label": "Sunroof" },
+#           { "icon": "MdEventSeat", "label": "Heated Seats" },
+#           { "icon": "FaCameraRetro", "label": "Backup Camera" }
+#         ],
+#         "technicalSpecifications": [
+#           { "label": "Touchscreen Display", "value": "Yes" },
+#           { "label": "Number of Doors", "value": "4" },
+#           { "label": "Number of Seats", "value": "5" },
+#           { "label": "Body Type", "value": "Sedan" },
+#           { "label": "Parking Sensors", "value": "Yes" },
+#           { "label": "Child Safety Locks", "value": "Yes" }
+#         ]
+#       },
+#       {
+#         "id": 2,
+#         "brand": "Toyota",
+#         "model": "Corolla",
+#         "year": "2021",
+#         "price": "$28,000",
+#         "kmDriven": "25,000 km",
+#         "fuelType": "Diesel",
+#         "transmission": "Manual",
+#         "condition": "Excellent",
+#         "location": "Mumbai",
+#         "images": [
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+#         ],
+#         "features": [
+#           { "icon": "FaSnowflake", "label": "Air Conditioning" },
+#           { "icon": "FaWindowMaximize", "label": "Power Windows" },
+#           { "icon": "FaCogs", "label": "Power Steering" },
+#           { "icon": "FaCar", "label": "Cruise Control" },
+#           { "icon": "MdEventSeat", "label": "Leather Seats" },
+#           { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+#           { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+#           { "icon": "FaKey", "label": "Keyless Entry" },
+#           { "icon": "FaSun", "label": "Sunroof" },
+#           { "icon": "MdEventSeat", "label": "Heated Seats" },
+#           { "icon": "FaCameraRetro", "label": "Backup Camera" }
+#         ],
+#         "technicalSpecifications": [
+#           { "label": "Touchscreen Display", "value": "Yes" },
+#           { "label": "Number of Doors", "value": "4" },
+#           { "label": "Number of Seats", "value": "5" },
+#           { "label": "Body Type", "value": "Sedan" },
+#           { "label": "Parking Sensors", "value": "Yes" },
+#           { "label": "Child Safety Locks", "value": "Yes" }
+#         ]
+#       }
+#     ],
+#     "Tata": [
+#       {
+#         "id": 3,
+#         "brand": "Tata",
+#         "model": "Nexon",
+#         "year": "2023",
+#         "price": "$20,000",
+#         "kmDriven": "15,000 km",
+#         "fuelType": "Petrol",
+#         "transmission": "Automatic",
+#         "condition": "New",
+#         "location": "Delhi",
+#         "images": [
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+#         ],
+#         "features": [
+#           { "icon": "FaSnowflake", "label": "Air Conditioning" },
+#           { "icon": "FaWindowMaximize", "label": "Power Windows" },
+#           { "icon": "FaCogs", "label": "Power Steering" },
+#           { "icon": "FaCar", "label": "Cruise Control" },
+#           { "icon": "MdEventSeat", "label": "Leather Seats" },
+#           { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+#           { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+#           { "icon": "FaKey", "label": "Keyless Entry" },
+#           { "icon": "FaSun", "label": "Sunroof" },
+#           { "icon": "MdEventSeat", "label": "Heated Seats" },
+#           { "icon": "FaCameraRetro", "label": "Backup Camera" }
+#         ],
+#         "technicalSpecifications": [
+#           { "label": "Touchscreen Display", "value": "Yes" },
+#           { "label": "Number of Doors", "value": "4" },
+#           { "label": "Number of Seats", "value": "5" },
+#           { "label": "Body Type", "value": "SUV" },
+#           { "label": "Parking Sensors", "value": "Yes" },
+#           { "label": "Child Safety Locks", "value": "Yes" }
+#         ]
+#       },
+#       {
+#         "id": 4,
+#         "brand": "Tata",
+#         "model": "Harrier",
+#         "year": "2022",
+#         "price": "$27,000",
+#         "kmDriven": "18,000 km",
+#         "fuelType": "Diesel",
+#         "transmission": "Manual",
+#         "condition": "Excellent",
+#         "location": "Chennai",
+#         "images": [
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80",
+#           "https://imgd.aeplcdn.com/370x208/n/cw/ec/130591/fronx-exterior-right-front-three-quarter-109.jpeg?isig=0&q=80"
+#         ],
+#         "features": [
+#           { "icon": "FaSnowflake", "label": "Air Conditioning" },
+#           { "icon": "FaWindowMaximize", "label": "Power Windows" },
+#           { "icon": "FaCogs", "label": "Power Steering" },
+#           { "icon": "FaCar", "label": "Cruise Control" },
+#           { "icon": "MdEventSeat", "label": "Leather Seats" },
+#           { "icon": "FaMapMarkerAlt", "label": "Navigation System" },
+#           { "icon": "FaBluetooth", "label": "Bluetooth Connectivity" },
+#           { "icon": "FaKey", "label": "Keyless Entry" },
+#           { "icon": "FaSun", "label": "Sunroof" },
+#           { "icon": "MdEventSeat", "label": "Heated Seats" },
+#           { "icon": "FaCameraRetro", "label": "Backup Camera" }
+#         ],
+#         "technicalSpecifications": [
+#           { "label": "Touchscreen Display", "value": "Yes" },
+#           { "label": "Number of Doors", "value": "4" },
+#           { "label": "Number of Seats", "value": "5" },
+#           { "label": "Body Type", "value": "SUV" },
+#           { "label": "Parking Sensors", "value": "Yes" },
+#           { "label": "Child Safety Locks", "value": "Yes" }
+#         ]
+#       }
+#     ]
+#   }
+# }
 
 ###
 POST http://localhost:3001/user/login
 Content-Type: application/json
 
 {
-  "email" : "kiruthikar",
+  "email" : "jeevenkumar2003@gmail.com",
   "password" : "checking"
 }
-
 
 ###
 POST http://localhost:3001/user/register/
@@ -136,3 +252,50 @@ Content-Type: application/json
   "email" : "jeevenkumar2003@gmail.com"
 }
 
+###
+GET http://localhost:3001/all-cars
+ 
+###
+DELETE http://localhost:3001/cars/
+Content-Type: application/json
+
+
+###
+
+POST http://localhost:3001/cars
+Content-Type: application/json
+
+{
+  "uniqueId": "c13744f8-00ba-42b5-a6da-1a114415f892",
+  "car": {
+    "brand": "Ford",
+    "model": "Mustang",
+    "year": "2024",
+    "price": "$40,000",
+    "kmDriven": "0 km",
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "condition": "New",
+    "location": "New York",
+    "images": [
+      "https://example.com/image1.jpg",
+      "https://example.com/image2.jpg"
+    ],
+    "features": [
+      { "icon": "FaSnowflake", "label": "Air Conditioning" },
+      { "icon": "FaCar", "label": "Cruise Control" }
+    ],
+    "technicalSpecifications": [
+      { "label": "Touchscreen Display", "value": "Yes" },
+      { "label": "Number of Doors", "value": "2" }
+    ]
+  }
+}
+
+
+###
+POST http://localhost:3001/cars/add-uuid 
+
+//route to get single car data 
+###
+GET http://localhost:3001/cars/623d97170ff4
