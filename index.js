@@ -52,16 +52,6 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false } // To track if the user is verified
 });
 
-// const userSchema = new mongoose.Schema({
-//   email: { type: String, unique: true, required: true }, // Changed from `username` to `email`
-//   password: { type: String, required: true },
-//   uniqueId: { type: String, unique: true }, // Unique ID for user
-//   otp: String, // OTP for verification
-//   otpExpiry: Date, // Expiry time for OTP
-//   isVerified: { type: Boolean, default: false } // To track if the user is verified
-// });
-
-
 
 const carSchema = new mongoose.Schema({
   carId: { type: String, unique: true, required: true },
@@ -158,7 +148,6 @@ app.put('/admin/:id', authenticateUniqueId, async (req, res) => {
   const { id } = req.params; // This is the ID of the admin to be updated
   const { email, password, uniqueId } = req.body; // This is the ID of the admin making the request
 
-  console.log(email, password, uniqueId);
 
   try {
     // Check if the request comes from an authorized admin
@@ -272,7 +261,6 @@ app.post('/user/request-otp', async (req, res) => {
 
     // Check if user already exists
     let user = await User.findOne({ email });
-    console.log(user)
     
     if (user && user.isVerified) {
       return res.status(400).json({ error: 'User already registered' });
@@ -292,8 +280,20 @@ app.post('/user/request-otp', async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP code is ${otp}. It will expire in 15 minutes.`
+      subject: 'Your OTP Code - cars2customer',
+      text: `Dear Customer,
+
+      Thank you for choosing cars2customer! 
+
+      Your OTP code is ${otp}. Please use this code to complete your verification process. It will expire in 15 minutes, so be sure to enter it promptly.
+
+      If you did not request this code, please contact our support team immediately.
+
+      We appreciate your trust in us to help you find the best vehicles suited to your needs. 
+
+      Best regards,
+      The cars2customer Team
+      `
     };
 
     await transporter.sendMail(mailOptions);
@@ -361,8 +361,20 @@ app.post('/user/request-reset', async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Password Reset OTP',
-      text: `Your OTP code for password reset is ${otp}. It will expire in 15 minutes.`
+      subject: 'Password Reset OTP - cars2customer',
+      text: `Dear Customer,
+
+      It looks like you requested to reset your password for your cars2customer account. 
+
+      Your OTP code is ${otp}. Please use this code to complete the password reset process. It will expire in 15 minutes, so be sure to enter it promptly.
+
+      If you did not request this code, please contact our support team immediately.
+
+      We take your security seriously and are here to help if you need any assistance.
+
+      Best regards,
+      The cars2customer Team
+      `
     };
 
     await transporter.sendMail(mailOptions);
@@ -499,38 +511,6 @@ app.post('/cars', authenticateUniqueId, async (req, res) => {
 });
 
 
-
-
-// Route to edit car data (protected for admins only)
-// app.put('/cars/:carId', authenticateUniqueId, async (req, res) => {
-//   const { uniqueId, updateData } = req.body;
-//   const { carId } = req.params;
-
-//   const car = await Car.findOne({ carId });
-//   console.log(car);
-//   try {
-//     // Check if the request comes from an authorized admin
-//     const admin = await Admin.findOne({ uniqueId });
-//     if (!admin) {
-//       return res.status(403).json({ error: 'Unauthorized' });
-//     }
-
-//     // Find the car by ID and update it
-//     const updatedCar = await Car.findByIdAndUpdate(carId, updateData, { new: true });
-
-//     if (!updatedCar) {
-//       return res.status(404).json({ error: 'Car not found' });
-//     }
-
-//     // Respond with the updated car details
-//     res.status(200).json({ message: 'Car updated successfully!', car: updatedCar });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'Failed to update car' });
-//   }
-// });
-
-// Route to edit car data (protected for admins only)
 // Route to edit car data (protected for admins only)
 app.put('/cars/:carId', authenticateUniqueId, async (req, res) => {
   const { uniqueId } = req.body; // Extract uniqueId from the body
