@@ -591,8 +591,6 @@ app.delete('/cars/:carId', authenticateUniqueId, async (req, res) => {
 
 
 
-
-
 // Start the server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
