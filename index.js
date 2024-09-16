@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
 
 
 const carSchema = new mongoose.Schema({
-  carId: { type: String, unique: true },
+  carId: { type: String, unique: true, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   year: { type: String, required: true },
@@ -316,12 +316,6 @@ app.post('/user/register', async (req, res) => {
     // if (!user) {
     //   return res.status(400).json({ error: 'User not found' });
     // }
-
-    console.log('Received OTP:', otp);
-    console.log('Stored OTP:', user.otp);
-    console.log('OTP Expiry Time:', user.otpExpiry);
-    console.log('Current Time:', new Date());
-
     // Check if OTP is correct and not expired
     if (!user.otp || user.otp !== otp || user.otpExpiry < Date.now()) {
       return res.status(400).json({ error: 'Invalid or expired OTP' });
@@ -365,7 +359,7 @@ app.post('/user/request-reset', async (req, res) => {
     await user.save();
 
     const mailOptions = {
-      from: 'your-email@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Password Reset OTP',
       text: `Your OTP code for password reset is ${otp}. It will expire in 15 minutes.`
@@ -508,10 +502,40 @@ app.post('/cars', authenticateUniqueId, async (req, res) => {
 
 
 // Route to edit car data (protected for admins only)
-app.put('/cars/:id', authenticateUniqueId, async (req, res) => {
-  const { uniqueId } = req.body;
-  const { id } = req.params;
-  const updateData = req.body;
+// app.put('/cars/:carId', authenticateUniqueId, async (req, res) => {
+//   const { uniqueId, updateData } = req.body;
+//   const { carId } = req.params;
+
+//   const car = await Car.findOne({ carId });
+//   console.log(car);
+//   try {
+//     // Check if the request comes from an authorized admin
+//     const admin = await Admin.findOne({ uniqueId });
+//     if (!admin) {
+//       return res.status(403).json({ error: 'Unauthorized' });
+//     }
+
+//     // Find the car by ID and update it
+//     const updatedCar = await Car.findByIdAndUpdate(carId, updateData, { new: true });
+
+//     if (!updatedCar) {
+//       return res.status(404).json({ error: 'Car not found' });
+//     }
+
+//     // Respond with the updated car details
+//     res.status(200).json({ message: 'Car updated successfully!', car: updatedCar });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Failed to update car' });
+//   }
+// });
+
+// Route to edit car data (protected for admins only)
+// Route to edit car data (protected for admins only)
+app.put('/cars/:carId', authenticateUniqueId, async (req, res) => {
+  const { uniqueId } = req.body; // Extract uniqueId from the body
+  const { carId } = req.params; // Extract carId from the URL parameters
+  const updateData = req.body.updateData; // Extract update data from the body
 
   try {
     // Check if the request comes from an authorized admin
@@ -520,8 +544,8 @@ app.put('/cars/:id', authenticateUniqueId, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Find the car by ID and update it
-    const updatedCar = await Car.findByIdAndUpdate(id, updateData, { new: true });
+    // Find the car by custom carId and update it
+    const updatedCar = await Car.findOneAndUpdate({ carId: carId }, updateData, { new: true });
 
     if (!updatedCar) {
       return res.status(404).json({ error: 'Car not found' });
@@ -536,10 +560,12 @@ app.put('/cars/:id', authenticateUniqueId, async (req, res) => {
 });
 
 
+
 // Route to delete car data (protected for admins only)
-app.delete('/cars/:id', authenticateUniqueId, async (req, res) => {
-  const { uniqueId } = req.body;
-  const { id } = req.params;
+// Route to delete a car (protected for admins only)
+app.delete('/cars/:carId', authenticateUniqueId, async (req, res) => {
+  const { uniqueId } = req.body; // Extract uniqueId from the body
+  const { carId } = req.params; // Extract carId from the URL parameters
 
   try {
     // Check if the request comes from an authorized admin
@@ -548,8 +574,8 @@ app.delete('/cars/:id', authenticateUniqueId, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Find and delete the car by ID
-    const deletedCar = await Car.findByIdAndDelete(id);
+    // Find and delete the car by custom carId
+    const deletedCar = await Car.findOneAndDelete({ carId: carId });
 
     if (!deletedCar) {
       return res.status(404).json({ error: 'Car not found' });
@@ -562,6 +588,8 @@ app.delete('/cars/:id', authenticateUniqueId, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete car' });
   }
 });
+
+
 
 
 
