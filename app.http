@@ -6,6 +6,7 @@ Content-Type: application/json
   "uniqueId": "c13744f8-00ba-42b5-a6da-1a114415f892",
   "cars": {
     "Mustang":[
+      
     "brand": "Ford",
     "model": "Mustang",
     "year": "2024",
@@ -520,3 +521,17 @@ GET http://localhost:3001/cars/623d97170ff4
 ###
 # Route to get all admin data
 GET http://localhost:3001/admin/all HTTP/1.1
+
+
+
+
+###
+POST   http://localhost:3001/favorites/add
+Content-Type: application/json
+
+{
+  "email" : "jeevenkumar2003@gmail.com",
+  "password" : "checking",
+  "uniqueId" : "0c0a9731-918b-4611-9090-ae488bc4ab28",
+  "carId" : "48ec86c14dd7"
+}

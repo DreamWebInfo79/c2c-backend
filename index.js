@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
+const { Schema } = mongoose;
 require('dotenv').config(); 
 
 const app = express();
@@ -42,17 +43,6 @@ const adminSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-
-const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, required: true }, // Changed from `username` to `email`
-  password: { type: String },
-  uniqueId: { type: String, unique: true }, // Unique ID for user
-  otp: String, // OTP for verification
-  otpExpiry: Date, // Expiry time for OTP
-  isVerified: { type: Boolean, default: false } // To track if the user is verified
-});
-
-
 const carSchema = new mongoose.Schema({
   carId: { type: String, unique: true, required: true },
   brand: { type: String, required: true },
@@ -81,6 +71,19 @@ const carSchema = new mongoose.Schema({
     }
   ]
 });
+
+const userSchema = new mongoose.Schema({
+  email: { type: String, unique: true }, // Changed from `username` to `email`
+  password: { type: String },
+  uniqueId: { type: String, unique: true }, // Unique ID for user
+  otp: String, // OTP for verification
+  otpExpiry: Date, // Expiry time for OTP
+  isVerified: { type: Boolean, default: false },
+  favorites: [carSchema]
+});
+
+
+
 
 // Create models
 const Car = mongoose.model('Car', carSchema);
@@ -111,6 +114,14 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
+// Middleware to authenticate user (example, you can adjust this)
+const authenticateUser = (req, res, next) => {
+  const uniqueId = req.body;
+  // Mock authentication check (assuming user ID comes from JWT or session)
+  if (!uniqueId) return res.status(401).json({ error: 'Unauthorized' });
+  next();
+};
 
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {
@@ -566,6 +577,75 @@ app.delete('/cars/:carId', authenticateUniqueId, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to delete car' });
+  }
+});
+
+
+//favourite
+app.post('/favorites/add', authenticateUser, async (req, res) => {
+  const { carId, uniqueId } = req.body; // carId and uniqueId are expected in the request body
+
+  try {
+    // Find the user
+    const user = await User.findOne({ uniqueId: uniqueId });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Find the car by carId
+    const car = await Car.findOne({ carId: carId });
+    if (!car) return res.status(404).json({ error: 'Car not found' });
+
+    // Check if the car is already in the user's favorites
+    const carExists = user.favorites.some(fav => fav.carId === carId);
+    console.log(carExists)
+    if (carExists) return res.status(400).json({ error: 'Car is already in favorites' });
+    // Add the car details to the user's favorites
+    user.favorites.push(car);
+    await user.save();
+
+    return res.status(200).json({ message: 'Car added to favorites' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Remove a car from the favorite list
+app.delete('/favorites/remove', authenticateUser, async (req, res) => {
+  const { carId } = req.body;
+  const userId = req.user._id; // Assuming user is authenticated and user id is in req.user
+
+  try {
+      // Find the user
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+
+      // Remove the car ID from the favorites list
+      const index = user.favorites.indexOf(carId);
+      if (index > -1) {
+          user.favorites.splice(index, 1);
+          await user.save();
+          return res.status(200).json({ message: 'Car removed from favorites' });
+      } else {
+          return res.status(400).json({ error: 'Car not found in favorites' });
+      }
+  } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Return the favorite list based on user ID
+app.get('/favorites/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+      // Find the user
+      const user = await User.findById(userId).populate('favorites');
+      if (!user) return res.status(404).json({ error: 'User not found' });
+
+      // Return the user's favorite cars
+      return res.status(200).json({ favorites: user.favorites });
+  } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
   }
 });
 
