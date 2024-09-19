@@ -610,7 +610,7 @@ app.post('/favorites/add', authenticateUser, async (req, res) => {
 });
 
 // Remove a car from the favorite list
-app.delete('/favorites/remove', authenticateUser, async (req, res) => {
+app.post('/favorites/remove', authenticateUser, async (req, res) => {
   const { carId, uniqueId } = req.body;
 
   try {
