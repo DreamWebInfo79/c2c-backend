@@ -611,44 +611,45 @@ app.post('/favorites/add', authenticateUser, async (req, res) => {
 
 // Remove a car from the favorite list
 app.delete('/favorites/remove', authenticateUser, async (req, res) => {
-  const { carId } = req.body;
-  const userId = req.user._id; // Assuming user is authenticated and user id is in req.user
+  const { carId, uniqueId } = req.body;
 
   try {
-      // Find the user
-      const user = await User.findById(userId);
-      if (!user) return res.status(404).json({ error: 'User not found' });
+    // Find the user
+    const user = await User.findOne({ uniqueId });
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-      // Remove the car ID from the favorites list
-      const index = user.favorites.indexOf(carId);
-      if (index > -1) {
-          user.favorites.splice(index, 1);
-          await user.save();
-          return res.status(200).json({ message: 'Car removed from favorites' });
-      } else {
-          return res.status(400).json({ error: 'Car not found in favorites' });
-      }
+    // Check if the car is in the user's favorites
+    const carIndex = user.favorites.findIndex(fav => fav.carId === carId);
+    if (carIndex === -1) return res.status(400).json({ error: 'Car not found in favorites' });
+
+    // Remove the car from the favorites list
+    user.favorites.splice(carIndex, 1);
+    await user.save();
+
+    return res.status(200).json({ message: 'Car removed from favorites' });
   } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+    console.error('Error removing car from favorites:', error);
+    return res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Return the favorite list based on user ID
-app.get('/favorites/:userId', async (req, res) => {
-  const userId = req.params.userId;
+
+
+app.get('/car/favorites/:uniqueId', async (req, res) => {
+  const uniqueId = req.params.uniqueId;
 
   try {
-      // Find the user
-      const user = await User.findById(userId).populate('favorites');
+      // Find the user by uniqueId
+      const user = await User.findOne({ uniqueId: uniqueId });
       if (!user) return res.status(404).json({ error: 'User not found' });
 
       // Return the user's favorite cars
       return res.status(200).json({ favorites: user.favorites });
   } catch (error) {
+      console.error('Error retrieving favorites:', error);
       return res.status(500).json({ error: 'Server error' });
   }
 });
-
 
 
 // Start the server

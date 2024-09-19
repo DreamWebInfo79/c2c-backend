@@ -392,7 +392,7 @@ POST http://localhost:3001/user/login
 Content-Type: application/json
 
 {
-  "email" : "jeevenkumar2003@gmail.com",
+  "email" : "priyakiruthi21@gmail.com",
   "password" : "checking"
 }
 
@@ -530,8 +530,26 @@ POST   http://localhost:3001/favorites/add
 Content-Type: application/json
 
 {
-  "email" : "jeevenkumar2003@gmail.com",
-  "password" : "checking",
-  "uniqueId" : "0c0a9731-918b-4611-9090-ae488bc4ab28",
+  "uniqueId" : "67c5dac4-febd-4b0d-a458-45f01ee01c69",
   "carId" : "48ec86c14dd7"
 }
+
+
+
+
+###
+DELETE    http://localhost:3001/favorites/remove
+Content-Type: application/json
+
+{
+  "uniqueId" : "67c5dac4-febd-4b0d-a458-45f01ee01c69",
+  "carId" : "48ec86c14dd7"
+}
+
+
+
+###
+GET   http://localhost:3001/car/favorites/67c5dac4-febd-4b0d-a458-45f01ee01c69
+
+
+
