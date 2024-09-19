@@ -49,6 +49,7 @@ const carSchema = new mongoose.Schema({
   model: { type: String, required: true },
   year: { type: String, required: true },
   price: { type: String, required: true },
+  paragraph: {type: String, required:true},
   kmDriven: { type: String, required: true },
   fuelType: { type: String, required: true },
   transmission: { type: String, required: true },
@@ -82,6 +83,16 @@ const userSchema = new mongoose.Schema({
   favorites: [carSchema]
 });
 
+const userCarSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  carId: { type: String, required: true },
+  carName: { type: String, required: true },
+  status: { type: String, default: 'pending' }, 
+  currentTime: { type: Date, default: Date.now },// e.g. 'booked', 'completed'
+}, { timestamps: true });
+
+const CarBooking = mongoose.model('CarBooking', userCarSchema);
 
 
 
@@ -256,7 +267,8 @@ app.post('/admin/login', async (req, res) => {
     if (!admin || !(await bcrypt.compare(password, admin.password))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    res.json({ message: 'Login successful!', uniqueId: admin.uniqueId });
+    console.log(admin);
+    res.json({ message: 'Login successful!', uniqueId: admin.uniqueId, role: 'admin' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to log in' });
@@ -610,7 +622,7 @@ app.post('/favorites/add', authenticateUser, async (req, res) => {
 });
 
 // Remove a car from the favorite list
-app.delete('/favorites/remove', authenticateUser, async (req, res) => {
+app.post('/favorites/remove', authenticateUser, async (req, res) => {
   const { carId, uniqueId } = req.body;
 
   try {
@@ -650,6 +662,93 @@ app.get('/car/favorites/:uniqueId', async (req, res) => {
       return res.status(500).json({ error: 'Server error' });
   }
 });
+
+//route used for car booking 
+app.post('/cars/bookings', async (req, res) => {
+  try {
+    const { username, phoneNumber, carId, carName, status } = req.body;
+
+    const newBooking = new CarBooking({
+      username,
+      phoneNumber,
+      carId,
+      carName,
+      status: status || 'pending',
+    });
+
+    const savedBooking = await newBooking.save();
+    res.status(201).json(savedBooking);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// Get all bookings
+app.get('/cars/bookings', async (req, res) => {
+  try {
+    const bookings = await CarBooking.find();
+    res.status(200).json(bookings);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// Get a single booking by ID
+app.get('/cars/bookings/:id', async (req, res) => {
+  try {
+    const booking = await CarBooking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.status(200).json(booking);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+app.put('/cars/bookings/:id', async (req, res) => {
+  try {
+    const { username, phoneNumber, carId, carName, status } = req.body;
+
+    const updatedBooking = await CarBooking.findByIdAndUpdate(
+      req.params.id,
+      {
+        username,
+        phoneNumber,
+        carId,
+        carName,
+        status,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.status(200).json(updatedBooking);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+app.delete('/cars/bookings/:id', async (req, res) => {
+  try {
+    const deletedBooking = await CarBooking.findByIdAndDelete(req.params.id);
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.status(200).json({ message: 'Booking deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+
 
 
 // Start the server
