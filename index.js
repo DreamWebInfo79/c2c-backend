@@ -357,7 +357,7 @@ app.post('/user/register', async (req, res) => {
     user.otpExpiry = null; // Clear OTP expiry time
 
     await user.save();
-    res.status(201).json({ message: 'User registered successfully!', uniqueId });
+    res.status(201).json({ message: 'User registered successfully!', uniqueId,  favorites: user.favorites});
   } catch (err) {
     console.error('Error registering user:', err);
     res.status(500).json({ error: 'Failed to register user' });
@@ -449,7 +449,7 @@ app.post('/user/login', async (req, res) => {
     }
 
     // If login is successful
-    res.json({ message: 'Login successful!', uniqueId: user.uniqueId });
+    res.json({ message: 'Login successful!', uniqueId: user.uniqueId, favorites: user.favorites });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to log in' });
@@ -616,7 +616,7 @@ app.post('/favorites/add', authenticateUser, async (req, res) => {
     user.favorites.push(car);
     await user.save();
 
-    return res.status(200).json({ message: 'Car added to favorites' });
+    return res.status(200).json({ message: 'Car added to favorites', favorites: user.favorites });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
@@ -640,7 +640,7 @@ app.post('/favorites/remove', authenticateUser, async (req, res) => {
     user.favorites.splice(carIndex, 1);
     await user.save();
 
-    return res.status(200).json({ message: 'Car removed from favorites' });
+    return res.status(200).json({ message: 'Car removed from favorites', favorites: user.favorites });
   } catch (error) {
     console.error('Error removing car from favorites:', error);
     return res.status(500).json({ error: 'Server error' });

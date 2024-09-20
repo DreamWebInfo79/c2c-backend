@@ -388,7 +388,7 @@ Content-Type: application/json
 }
 
 ###
-POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/user/login
+POST http://localhost:3001/user/login
 Content-Type: application/json
 
 {
@@ -526,24 +526,24 @@ GET https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/
 
 
 ###
-POST   https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/favorites/add
+POST   http://localhost:3001/favorites/add
 Content-Type: application/json
 
 {
-  "uniqueId" : "67c5dac4-febd-4b0d-a458-45f01ee01c69",
-  "carId" : "48ec86c14dd7"
+  "uniqueId" : "6abda094-793b-4d1d-884c-b11754b68003",
+  "carId" : "fad81274-c68e-4b93-a033-e6ad73a7fece"
 }
 
 
 
 
 ###
-DELETE    https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/favorites/remove
+POST     http://localhost:3001/favorites/remove
 Content-Type: application/json
 
 {
-  "uniqueId" : "67c5dac4-febd-4b0d-a458-45f01ee01c69",
-  "carId" : "48ec86c14dd7"
+  "uniqueId" : "6abda094-793b-4d1d-884c-b11754b68003",
+  "carId" : "fad81274-c68e-4b93-a033-e6ad73a7fece"
 }
 
 
