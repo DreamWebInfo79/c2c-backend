@@ -664,7 +664,7 @@ app.get('/car/favorites/:uniqueId', async (req, res) => {
       return res.status(500).json({ error: 'Server error' });
   }
 });
-
+``
 //route used for car booking 
 app.post('/cars/bookings', async (req, res) => {
   const { username, phoneNumber, contactId, carName, status } = req.body;
