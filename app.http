@@ -1,5 +1,5 @@
 ###
-POST  http://localhost:3001/cars
+POST  https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/cars
 Content-Type: application/json
 
 {
@@ -388,7 +388,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/user/login
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/user/login
 Content-Type: application/json
 
 {
@@ -397,7 +397,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/user/register/
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/user/register/
 Content-Type: application/json
 
 {
@@ -409,7 +409,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3001/admin/register
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/register
 Content-Type: application/json
 
 {
@@ -421,27 +421,17 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3001/admin/register/top
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/register/top
 Content-Type: application/json
 
 {
-  "email" : "kiruthiadmin@gmail.com",
-  "password" : "checking"
+  "email" : "mathi@cars2customer.com",
+  "password" : "@Cars2customer.com"
 }
 
 
 ###
-PUT http://localhost:3001/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
-Content-Type: application/json
-
-{
-  "email" : "kiruthika@gmail.com",
-  "password" : "checking",
-  "uniqueId" : "4e20eab9-64c2-4203-b06a-bde5b5527e9a"
-}
-
-###
-DELETE  http://localhost:3001/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
+PUT https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
 Content-Type: application/json
 
 {
@@ -450,9 +440,19 @@ Content-Type: application/json
   "uniqueId" : "4e20eab9-64c2-4203-b06a-bde5b5527e9a"
 }
 
+###
+DELETE  https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/1569a6bb-8b4b-43d1-92b6-e46767588bd3
+Content-Type: application/json
+
+{
+  "email" : "kiruthika@gmail.com",
+  "password" : "checking",
+  "uniqueId" : "4e20eab9-64c2-4203-b06a-bde5b5527e9a"
+}
+
 
 ###
-POST http://localhost:3001/admin/login
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/login
 Content-Type: application/json
 
 {
@@ -463,7 +463,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3001/user/request-otp
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/user/request-otp
 Content-Type: application/json
 
 {
@@ -471,16 +471,16 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3001/all-cars
+GET https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/all-cars
  
 ###
-DELETE http://localhost:3001/cars/
+DELETE https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/cars/
 Content-Type: application/json
 
 
 ###
 
-POST http://localhost:3001/cars
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/cars
 Content-Type: application/json
 
 {
@@ -512,21 +512,21 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3001/cars/add-uuid 
+POST https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/cars/add-uuid 
 
 //route to get single car data 
 ###
-GET http://localhost:3001/cars/623d97170ff4
+GET https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/cars/623d97170ff4
 
 ###
 # Route to get all admin data
-GET http://localhost:3001/admin/all HTTP/1.1
+GET https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/admin/all HTTP/1.1
 
 
 
 
 ###
-POST   http://localhost:3001/favorites/add
+POST   https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/favorites/add
 Content-Type: application/json
 
 {
@@ -538,7 +538,7 @@ Content-Type: application/json
 
 
 ###
-DELETE    http://localhost:3001/favorites/remove
+DELETE    https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/favorites/remove
 Content-Type: application/json
 
 {
@@ -549,7 +549,7 @@ Content-Type: application/json
 
 
 ###
-GET   http://localhost:3001/car/favorites/67c5dac4-febd-4b0d-a458-45f01ee01c69
+GET   https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/car/favorites/67c5dac4-febd-4b0d-a458-45f01ee01c69
 
-
-
+###
+GET http://localhost:3001/cars/bookings HTTP/1.1

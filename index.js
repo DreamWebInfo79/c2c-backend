@@ -24,35 +24,6 @@ app.use(cors({
 
 app.use(express.json()); 
 
-
-exports.handler = async (event) => {
-  const headers = {
-      "Access-Control-Allow-Origin": "*", // or specify a specific origin
-      "Access-Control-Allow-Headers": "Content-Type,Authorization",
-      "Access-Control-Allow-Methods": "OPTIONS,POST,GET", // Allow the methods you are using
-  };
-
-  // Handle preflight request
-  if (event.httpMethod === 'OPTIONS') {
-      return {
-          statusCode: 200,
-          headers,
-          body: '',
-      };
-  }
-
-  // Your main logic for GET/POST/other methods
-  const response = {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ message: "Hello from Lambda!" }),
-  };
-
-  return response;
-};
-
-
-
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
 
@@ -103,6 +74,7 @@ const carSchema = new mongoose.Schema({
   ]
 });
 
+
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true }, // Changed from `username` to `email`
   password: { type: String },
@@ -116,7 +88,7 @@ const userSchema = new mongoose.Schema({
 const userCarSchema = new mongoose.Schema({
   username: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  carId: { type: String, required: true },
+  contactId : { type: String, required: true },
   carName: { type: String, required: true },
   status: { type: String, default: 'pending' }, 
   currentTime: { type: Date, default: Date.now },// e.g. 'booked', 'completed'
@@ -695,13 +667,14 @@ app.get('/car/favorites/:uniqueId', async (req, res) => {
 
 //route used for car booking 
 app.post('/cars/bookings', async (req, res) => {
+  const { username, phoneNumber, contactId, carName, status } = req.body;
+  console.log(username, phoneNumber, contactId, carName, status);
   try {
-    const { username, phoneNumber, carId, carName, status } = req.body;
 
     const newBooking = new CarBooking({
       username,
       phoneNumber,
-      carId,
+      contactId,
       carName,
       status: status || 'pending',
     });
@@ -714,7 +687,7 @@ app.post('/cars/bookings', async (req, res) => {
 });
 
 // Get all bookings
-app.get('/cars/bookings', async (req, res) => {
+app.get('/carsBooked/bookings', async (req, res) => {
   try {
     const bookings = await CarBooking.find();
     res.status(200).json(bookings);
@@ -738,19 +711,20 @@ app.get('/cars/bookings/:id', async (req, res) => {
   }
 });
 
-app.put('/cars/bookings/:id', async (req, res) => {
+app.put('/carsBooked/bookings/:carId', async (req, res) => {
   try {
-    const { username, phoneNumber, carId, carName, status } = req.body;
+    const {carId } = req.params;
+    const {  status } = req.body; // Extract carId and status from the body
 
-    const updatedBooking = await CarBooking.findByIdAndUpdate(
-      req.params.id,
-      {
-        username,
-        phoneNumber,
-        carId,
-        carName,
-        status,
-      },
+    // Check if carId and status are provided
+    if (!carId || !status) {
+      return res.status(400).json({ message: 'carId and status are required' });
+    }
+
+    // Update the booking by carId
+    const updatedBooking = await CarBooking.findOneAndUpdate(
+      { carId: carId }, // Find by carId
+      { status }, // Update only the status
       { new: true, runValidators: true }
     );
 
@@ -764,9 +738,19 @@ app.put('/cars/bookings/:id', async (req, res) => {
   }
 });
 
-app.delete('/cars/bookings/:id', async (req, res) => {
+
+
+
+app.delete('/carsBooked/bookings/:carId', async (req, res) => {
   try {
-    const deletedBooking = await CarBooking.findByIdAndDelete(req.params.id);
+    const { carId } = req.params; // Extract carId from the request body
+
+    // Check if carId is provided
+    if (!carId) {
+      return res.status(400).json({ message: 'carId is required' });
+    }
+
+    const deletedBooking = await CarBooking.findOneAndDelete({ carId }); // Find by carId
 
     if (!deletedBooking) {
       return res.status(404).json({ message: 'Booking not found' });
@@ -779,12 +763,16 @@ app.delete('/cars/bookings/:id', async (req, res) => {
 });
 
 
-
-
 // Start the server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-module.exports.app = serverless(app);
+// module.exports.app = serverless(app);
+
+const handler = serverless(app);
+
+exports.handler = async (event, context) => {
+  return handler(event, context);
+};
