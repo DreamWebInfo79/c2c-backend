@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
 // const bcrypt = require('bcrypt');/
 const bcrypt = require('bcryptjs');
 
+const GoogleStrategy = require('passport-google-oauth20')
+const passport = require('passport');
+const session = require('express-session');
+
 const { v4: uuidv4 } = require('uuid'); 
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -12,7 +16,6 @@ const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const { Schema } = mongoose;
 require('dotenv').config(); 
-
 const app = express();
 
 app.use(cors());
@@ -23,6 +26,15 @@ app.use(cors({
 }));
 
 app.use(express.json()); 
+
+const secret = crypto.randomBytes(32).toString('hex');
+
+app.use(session({ secret: secret, resave: false, saveUninitialized: true }));
+
+app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
@@ -135,6 +147,102 @@ const authenticateUser = (req, res, next) => {
   if (!uniqueId) return res.status(401).json({ error: 'Unauthorized' });
   next();
 };
+
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL
+},
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    // Find user by email
+    let user = await User.findOne({ email: profile.emails[0].value });
+
+    if (!user) {
+      const uniqueId = generateUniqueId();
+      user = new User({
+        email: profile.emails[0].value,
+        uniqueId: uniqueId,
+        isVerified: true, // Google users are verified
+        favorites: [], // Initialize empty favorites
+      });
+      await user.save();
+    }
+
+    // Return only the uniqueId in the done callback
+    return done(null, { uniqueId: user.uniqueId, email:profile.emails[0].value, favorites: user.favorites });
+  } catch (err) {
+    return done(err, null);
+  }
+}
+));
+
+passport.serializeUser((user, done) => {
+  // Serialize only the uniqueId
+  done(null, { uniqueId: user.uniqueId });
+});
+
+passport.deserializeUser((obj, done) => {
+  // Deserialize only the uniqueId
+  done(null, obj);
+});
+
+
+
+
+// google login 
+
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.post('/auth/google/callback', async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+
+    // Find user by email
+    let user = await User.findOne({ email: payload.email });
+
+    if (!user) {
+      const uniqueId = generateUniqueId();
+      user = new User({
+        email: payload.email,
+        uniqueId: uniqueId,
+        isVerified: true, // Google users can be marked as verified
+        favorites: [], // Initialize empty favorites list
+      });
+      await user.save();
+    }
+
+    // Send only the uniqueId in the response
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.status(200).json({ uniqueId: user.uniqueId });
+    });
+  } catch (error) {
+    console.error('Error processing login:', error);
+    res.status(500).send({ message: 'Error processing login' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {

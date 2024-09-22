@@ -553,3 +553,4 @@ GET   https://7fk3e7jqgbgy7oaji5dudhb6jy0grwiu.lambda-url.ap-south-1.on.aws/car/
 
 ###
 GET http://localhost:3001/cars/bookings HTTP/1.1
+
