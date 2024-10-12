@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 // const bcrypt = require('bcrypt');/
 const bcrypt = require('bcryptjs');
-// const { OAuth2Client } = require('google-auth-library');
-// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const GoogleStrategy = require('passport-google-oauth20')
 const passport = require('passport');
@@ -18,19 +16,12 @@ const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const { Schema } = mongoose;
 require('dotenv').config(); 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const app = express();
 
-app.use(cors());
 
-// app.use(cors({
-//   origin: '*', 
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   credentials: true,
-// }));
-
-// const allowedOrigins = ['*'];
-
-const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.nizhaltnpsc.com']
+const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.cars2customer.com'];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -40,8 +31,22 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
+  next();
 });
+// app.use(cors());
+
+// const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.nizhaltnpsc.com'];
+
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
 app.use(express.json()); 
 
 const secret = crypto.randomBytes(32).toString('hex');
@@ -213,13 +218,8 @@ passport.deserializeUser((obj, done) => {
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-
-
-//google login for website
 app.post('/auth/google/callback', async (req, res) => {
   const { token } = req.body;
-  // console.log(req)
-  console.log(token)
 
   try {
     const ticket = await client.verifyIdToken({
@@ -247,64 +247,25 @@ app.post('/auth/google/callback', async (req, res) => {
       if (err) {
         return res.status(500).send(err);
       }
-      res.status(200).json({ uniqueId: user.uniqueId });
+      res.status(200).json({ uniqueId: user.uniqueId, email: user.email, favorites: user.favorites });
     });
   } catch (error) {
+    console.log(error)
     console.error('Error processing login:', error);
     res.status(500).send({ message: 'Error processing login' });
   }
 });
 
-console.log(process.env.ANDROID_CLIENT_ID);
-//google login for mobile app
-app.post('/auth/google/android', async (req, res) => {
-  console.log('Received request in /auth/google/android');
-  const { token } = req.body;
-  console.log('Token:', token);
 
-  try {
-    console.log('Verifying token...');
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.ANDROID_CLIENT_ID,
-    });
-    console.log('Ticket:', ticket);
-    const payload = ticket.getPayload();
 
-    console.log('Payload:', payload);
 
-    // Find user by email
-    console.log('Finding user by email...');
-    let user = await User.findOne({ email: payload.email });
 
-    if (!user) {
-      console.log('User not found. Creating new user...');
-      const uniqueId = generateUniqueId();
-      user = new User({
-        email: payload.email,
-        uniqueId: uniqueId,
-        isVerified: true, // Google users can be marked as verified
-        favorites: [], // Initialize empty favorites list
-      });
-      console.log('Saving user...');
-      await user.save();
-    }
 
-    console.log('User found. Logging in...');
-    // Send only the uniqueId in the response
-    req.login(user, (err) => {
-      if (err) {
-        console.error('Error logging in:', err);
-        return res.status(500).send(err);
-      }
-      console.log('Login successful. Sending response...');
-      res.status(200).json({ uniqueId: user.uniqueId });
-    });
-  } catch (error) {
-    console.error('Error processing login:', error);
-    res.status(500).send({ message: 'Error processing login' });
-  }
-});
+
+
+
+
+
 
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {
