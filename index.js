@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 // const bcrypt = require('bcrypt');/
 const bcrypt = require('bcryptjs');
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// const { OAuth2Client } = require('google-auth-library');
+// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const GoogleStrategy = require('passport-google-oauth20')
 const passport = require('passport');
