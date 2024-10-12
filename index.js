@@ -22,12 +22,26 @@ const app = express();
 
 app.use(cors());
 
+<<<<<<< HEAD
 app.use(cors({
   origin: '*', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
+=======
+const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.nizhaltnpsc.com'];
+>>>>>>> f2a160299bfb3b7c93d7f5e4ef95db5c0b0c12df
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 app.use(express.json()); 
 
 const secret = crypto.randomBytes(32).toString('hex');
