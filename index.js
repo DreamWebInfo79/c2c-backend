@@ -28,9 +28,9 @@ app.use(cors());
 //   credentials: true,
 // }));
 
-const allowedOrigins = ['*'];
+// const allowedOrigins = ['*'];
 
-// const allowedOrigins =[ 'http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.nizhaltnpsc.com']
+const allowedOrigins = [ '*', 'http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.nizhaltnpsc.com']
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
