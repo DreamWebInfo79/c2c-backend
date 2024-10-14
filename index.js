@@ -18,6 +18,7 @@ const { Schema } = mongoose;
 require('dotenv').config(); 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const clientAndroid = new OAuth2Client(process.env.ANDROID_CLIENT_ID);
 const app = express();
 
 
@@ -256,16 +257,41 @@ app.post('/auth/google/callback', async (req, res) => {
   }
 });
 
+app.post('/auth/google/android', async (req, res) => {
+  const { token } = req.body;
 
+  try {
+    const ticket = await clientAndroid.verifyIdToken({
+      idToken: token,
+      audience: process.env.ANDROID_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
 
+    // Find user by email
+    let user = await User.findOne({ email: payload.email });
 
+    if (!user) {
+      const uniqueId = uuidv4(); // Generate a unique ID for the user
+      user = new User({
+        email: payload.email,
+        uniqueId: uniqueId,
+        isVerified: true, // Google users can be marked as verified
+        favorites: [], // Initialize empty favorites list
+      });
+      await user.save();
+    }
 
-
-
-
-
-
-
+    // Send only the uniqueId in the response
+    res.status(200).json({
+      uniqueId: user.uniqueId,
+      email: user.email,
+      favorites: user.favorites,
+    });
+  } catch (error) {
+    console.error('Error processing login:', error);
+    res.status(500).json({ message: 'Error processing login' });
+  }
+});
 
 // Route to register a new admin
 app.post('/admin/register', async (req, res) => {
