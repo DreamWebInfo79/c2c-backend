@@ -22,7 +22,7 @@ const clientAndroid = new OAuth2Client(process.env.ANDROID_CLIENT_ID);
 const app = express();
 
 
-const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.cars2customer.com'];
+const allowedOrigins = ['http://localhost:3000', 'https://cars2customer.com', 'http://localhost:3001', 'https://www.cars2customer.com','null'];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
